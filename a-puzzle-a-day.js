@@ -39,8 +39,12 @@ let piecePositions;
 let count = 0;
 let startTime;
 let stop = true;
+// глобальний прапор для контролю дзеркального відображення
+let allowMirroring = false; // За замовчуванням вимкнено
 
-function init() {
+// Нова функція ініціалізації, яка приймає прапор
+function init(mirrorEnabled) {
+  allowMirroring = mirrorEnabled; // Встановлюємо режим
   clearBoard();
   const targets = [
     document.querySelector('#month').value,
@@ -58,7 +62,7 @@ function noGUI() {
     return;
   }
 
-  init();
+  init(true);
   count = -1;
   requestAnimationFrame(step);
   function step() {
@@ -89,12 +93,12 @@ function noGUI() {
   }
 }
 
-function main() {
+function startNoMirror() {
   if (stop) {
     return;
   }
 
-  init();
+  init(false);
   count = 0;
   const stacks = [getNextPossibleSelections([], 0), [], [], [], [], [], [], []];
   let currentIndexes = [];
@@ -120,6 +124,39 @@ function main() {
     }
   }
 }
+
+function startWithMirror() {
+  if (stop) {
+    return;
+  }
+
+  init(true);
+  count = 0;
+  const stacks = [getNextPossibleSelections([], 0), [], [], [], [], [], [], []];
+  let currentIndexes = [];
+  requestAnimationFrame(step);
+  function step(timestamp) {
+    if (!startTime) {
+      startTime = timestamp;
+    }
+    const lastIndex = _.findLastIndex(stacks, stack => stack.length !== 0);
+    currentIndexes[lastIndex] = stacks[lastIndex].shift();
+    currentIndexes = currentIndexes.slice(0, lastIndex + 1);
+    count++;
+    colorBoard(currentIndexes, timestamp - startTime);
+
+    if (lastIndex !== pieceColors.length - 1) {
+      stacks[lastIndex + 1] = getNextPossibleSelections(currentIndexes, lastIndex + 1);
+    }
+
+    if (currentIndexes.length !== pieceColors.length && !stop) {
+      requestAnimationFrame(step);
+    } else {
+      stop = true;
+    }
+  }
+}
+
 
 function getNextPossibleSelections(currentIndexes, pieceIndex) {
   const baseSelections = _.flatten(currentIndexes.map((c, i) => piecePositions[i][c]));
@@ -301,17 +338,31 @@ function generateDirections() {
     const newPieces = [];
     let newPiece = originalPiece;
     
-    // Видаляємо блок з mirroredNewPiece
+// ----- Блок з дзеркальним відображенням (Виконується, лише якщо дозволено) -----
+    if (allowMirroring) {
+        let mirroredNewPiece = mirror(newPiece);
+        if (!_.isEqual(mirroredNewPiece, originalPiece)) {
+          newPieces.push(mirroredNewPiece);
+        }
+    }
+// ----------------------------------------------------------------------------
 
     [0, 1, 2].forEach(() => { // 3 обертання (90, 180, 270 градусів)
       newPiece = rotateClockwise(newPiece);
       
-      // Додаємо лише нові обернені форми
+      // Додаємо  нові обернені форми
       if (!_.isEqual(newPiece, originalPiece)) {
         newPieces.push(newPiece);
       }
       
-      // Видаляємо блок з mirroredNewPiece
+// ----- Блок з дзеркальним відображенням після обертання -----
+      if (allowMirroring) {
+          let mirroredNewPiece = mirror(newPiece);
+          if (!_.isEqual(mirroredNewPiece, originalPiece)) {
+            newPieces.push(mirroredNewPiece);
+          }
+      }
+// -------------------------------------------------------------
     });
 
     // Використовуємо _.uniqWith для забезпечення унікальності (хоча для обертань це менш критично, ніж для обертань+відображень)
@@ -347,29 +398,3 @@ function mirror(coordinates) {
 }
 
 
-function generateDirectionsMirrors() {
-  pieces.forEach(piece => {
-    const originalPiece = _.head(piece);
-
-    const newPieces = [];
-    let newPiece = originalPiece;
-    let mirroredNewPiece = mirror(newPiece);
-
-    if (!_.isEqual(mirroredNewPiece, originalPiece)) {
-      newPieces.push(mirroredNewPiece);
-    }
-
-    [0, 1, 2].forEach(() => {
-      newPiece = rotateClockwise(newPiece);
-      mirroredNewPiece = mirror(newPiece);
-      if (!_.isEqual(newPiece, originalPiece)) {
-        newPieces.push(newPiece);
-      }
-      if (!_.isEqual(mirroredNewPiece, originalPiece)) {
-        newPieces.push(mirroredNewPiece);
-      }
-    });
-
-    piece.push(..._.uniqWith(newPieces, _.isEqual));
-  });
-}
