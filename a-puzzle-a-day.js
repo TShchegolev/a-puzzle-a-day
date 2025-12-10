@@ -17,14 +17,14 @@ const boardNames = [
 const boardNamePositionMap = {};
 
 const pieces = [
-  [[[0, 0], [1, 0], [2, 0], [2, 1], [3, 1]]],          // purple
-  [[[0, 2], [1, 0], [1, 1], [1, 2], [2, 0]]],          // green
-  [[[0, 0], [0, 1], [0, 2], [1, 0], [2, 0]]],          // yellow
-  [[[0, 0], [1, 0], [1, 1], [2, 0], [3, 0]]],          // red
-  [[[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2]]],  // blue
-  [[[0, 0], [0, 1], [1, 0], [1, 1], [2, 0]]],          // pink
-  [[[0, 3], [1, 0], [1, 1], [1, 2], [1, 3]]],          // orange
-  [[[0, 0], [0, 2], [1, 0], [1, 1], [1, 2]]],          // gray
+  [[[0, 0], [1, 0], [2, 0], [2, 1], [3, 1]]],          // purple q
+  [[[0, 2], [1, 0], [1, 1], [1, 2], [2, 0]]],          // green z
+  [[[0, 0], [0, 1], [0, 2], [1, 0], [2, 0]]],          // yellow L
+  [[[0, 0], [1, 0], [1, 1], [2, 0], [3, 0]]],          // red T
+  [[[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2]]],  // blue O
+  [[[0, 0], [0, 1], [1, 0], [1, 1], [2, 0]]],          // pink b
+  [[[0, 3], [1, 0], [1, 1], [1, 2], [1, 3]]],          // orange j
+  [[[0, 0], [0, 2], [1, 0], [1, 1], [1, 2]]],          // gray c
 ];
 
 const pieceColors = [
@@ -300,45 +300,31 @@ function generateDirections() {
 
     const newPieces = [];
     let newPiece = originalPiece;
-    let mirroredNewPiece = mirror(newPiece);
+    
+    // Видаляємо блок з mirroredNewPiece
 
-    if (!_.isEqual(mirroredNewPiece, originalPiece)) {
-      newPieces.push(mirroredNewPiece);
-    }
-
-    [0, 1, 2].forEach(() => {
+    [0, 1, 2].forEach(() => { // 3 обертання (90, 180, 270 градусів)
       newPiece = rotateClockwise(newPiece);
-      mirroredNewPiece = mirror(newPiece);
+      
+      // Додаємо лише нові обернені форми
       if (!_.isEqual(newPiece, originalPiece)) {
         newPieces.push(newPiece);
       }
-      if (!_.isEqual(mirroredNewPiece, originalPiece)) {
-        newPieces.push(mirroredNewPiece);
-      }
+      
+      // Видаляємо блок з mirroredNewPiece
     });
 
+    // Використовуємо _.uniqWith для забезпечення унікальності (хоча для обертань це менш критично, ніж для обертань+відображень)
     piece.push(..._.uniqWith(newPieces, _.isEqual));
   });
 }
+
 
 function rotateClockwise(coordinates) {
   const maxX = Math.max(...coordinates.map(coordinate => coordinate[0]));
 
   return coordinates
           .map(coordinate => ([coordinate[1], maxX - coordinate[0]]))
-          .sort((a, b) => {
-            if (a[0] === b[0]) {
-              return a[1] - b[1];
-            }
-            return a[0] - b[0];
-          });
-}
-
-function mirror(coordinates) {
-  const maxY = Math.max(...coordinates.map(coordinate => coordinate[1]));
-
-  return coordinates
-          .map(coordinate => ([coordinate[0], maxY - coordinate[1]]))
           .sort((a, b) => {
             if (a[0] === b[0]) {
               return a[1] - b[1];
