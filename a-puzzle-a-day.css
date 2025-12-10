@@ -47,42 +47,49 @@ body {
 
 .green {
   background-color: green;
+  background-image: url('img/green.png');
   border-color: green;
   color: green;
 }
 
 .yellow {
   background-color: yellow;
+  background-image: url('img/yellow.png');
   border-color: yellow;
   color: yellow;
 }
 
 .red {
   background-color: red;
+  background-image: url('img/red.png');
   border-color: red;
   color: red;
 }
 
 .blue {
   background-color: blue;
+  background-image: url('img/blue.png');
   border-color: blue;
   color: blue;
 }
 
 .pink {
   background-color: pink;
+  background-image: url('img/pink.png');
   border-color: pink;
   color: pink;
 }
 
 .orange {
   background-color: orange;
+  background-image: url('img/orange.png');
   border-color: orange;
   color: orange;
 }
 
 .gray {
   background-color: gray;
+  background-image: url('img/gray.png');
   border-color: gray;
   color: gray;
 }
