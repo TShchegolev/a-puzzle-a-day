@@ -17,18 +17,18 @@ const boardNames = [
 const boardNamePositionMap = {};
 
 const pieces = [
+  [[[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2]]],  // blue O
   [[[0, 0], [1, 0], [2, 0], [2, 1], [3, 1]]],          // purple q
   [[[0, 2], [1, 0], [1, 1], [1, 2], [2, 0]]],          // green z
   [[[0, 0], [0, 1], [0, 2], [1, 0], [2, 0]]],          // yellow L
   [[[0, 0], [1, 0], [2, 0], [2, 1], [3, 0]]],          // red T
-  [[[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2]]],  // blue O
   [[[0, 0], [0, 1], [1, 0], [1, 1], [2, 0]]],          // pink b
   [[[0, 3], [1, 0], [1, 1], [1, 2], [1, 3]]],          // orange j
   [[[0, 0], [0, 2], [1, 0], [1, 1], [1, 2]]],          // gray c
 ];
 
 const pieceColors = [
-  'purple', 'green', 'yellow', 'red', 'blue', 'pink', 'orange', 'gray'
+  'blue', 'purple', 'green', 'yellow', 'red',  'pink', 'orange', 'gray'
 ];
 
 boardNames.forEach((r, i) => r.forEach((v, j) => boardNamePositionMap[v] = [i, j]));
