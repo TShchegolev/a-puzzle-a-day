@@ -21,9 +21,9 @@
       <option value="Dec">December</option>
     </select>
     <input name="date" id="date" type="number" min="1" max="31" />
-    <button onclick="stop = !stop; main()">Stop/Start</button>
+    <button onclick="stop = !stop; startNoMirror()">Stop/Start</button>
     <button onclick="stop = !stop; noGUI()">Stop/Start without GUI</button>
-    <button onclick="stop = !stop; main()">Stop/Start (+mirror)</button>
+    <button onclick="stop = !stop; startWithMirror()">Stop/Start (+mirror)</button>
 
     <div class="block-container">
       <div class="block border-black" id="block00">Jan</div>
