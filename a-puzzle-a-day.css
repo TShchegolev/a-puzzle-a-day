@@ -40,6 +40,7 @@ body {
 
 .purple {
   background-color: purple;
+  background-image: url('img/purple.png');
   border-color: purple;
   color: purple;
 }
