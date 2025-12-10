@@ -1,7 +1,7 @@
 # A puzzle a day
 A dumb algorithm to solve the puzzle created by DragonFlord.
 
-for this kind of puzzle
+for this kind of the puzzle
 
 https://share.temu.com/g0f4SEQSdnB
 
