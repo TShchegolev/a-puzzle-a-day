@@ -332,3 +332,44 @@ function rotateClockwise(coordinates) {
             return a[0] - b[0];
           });
 }
+
+function mirror(coordinates) {
+  const maxY = Math.max(...coordinates.map(coordinate => coordinate[1]));
+
+  return coordinates
+          .map(coordinate => ([coordinate[0], maxY - coordinate[1]]))
+          .sort((a, b) => {
+            if (a[0] === b[0]) {
+              return a[1] - b[1];
+            }
+            return a[0] - b[0];
+          });
+}
+
+
+function generateDirectionsMirrors() {
+  pieces.forEach(piece => {
+    const originalPiece = _.head(piece);
+
+    const newPieces = [];
+    let newPiece = originalPiece;
+    let mirroredNewPiece = mirror(newPiece);
+
+    if (!_.isEqual(mirroredNewPiece, originalPiece)) {
+      newPieces.push(mirroredNewPiece);
+    }
+
+    [0, 1, 2].forEach(() => {
+      newPiece = rotateClockwise(newPiece);
+      mirroredNewPiece = mirror(newPiece);
+      if (!_.isEqual(newPiece, originalPiece)) {
+        newPieces.push(newPiece);
+      }
+      if (!_.isEqual(mirroredNewPiece, originalPiece)) {
+        newPieces.push(mirroredNewPiece);
+      }
+    });
+
+    piece.push(..._.uniqWith(newPieces, _.isEqual));
+  });
+}
