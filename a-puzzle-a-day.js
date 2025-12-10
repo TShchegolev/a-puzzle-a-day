@@ -32,7 +32,7 @@ const pieceColors = [
 ];
 
 boardNames.forEach((r, i) => r.forEach((v, j) => boardNamePositionMap[v] = [i, j]));
-generateDirections();
+
 
 let targetPositions;
 let piecePositions;
@@ -51,6 +51,8 @@ function init(mirrorEnabled) {
     document.querySelector('#date').value
   ];
   targetPositions = targets.map(t => boardNamePositionMap[t]);
+  // 2. Тепер, коли allowMirroring встановлено, ми викликаємо генерацію напрямків.
+  generateDirections(); // <--- НОВЕ МІСЦЕ!
   piecePositions = [];
   generateAllPiecePositions();
   removeTargetsFromCombinations();
